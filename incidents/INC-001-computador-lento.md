@@ -8,14 +8,11 @@ O usuário relata que o computador está apresentando lentidão.
 
 Um usuário afetado.
 
-O impacto relatado é redução de desempenho durante a utilização
-do computador.
+O impacto relatado é redução de desempenho durante a utilização do computador.
 
 ## 3. Investigação
 
-Foram utilizadas ferramentas nativas do Windows para avaliar
-CPU, memória, disco, processos, eventos do sistema e atividade
-de memória virtual.
+Foram utilizadas ferramentas nativas do Windows para avaliar CPU, memória, disco, processos, eventos do sistema e atividade de memória virtual.
 
 ### 3.1 Task Manager — primeira análise
 
@@ -56,8 +53,7 @@ Principais consumidores de memória observados:
 - Notepad: 102,7 MB
 - Task Manager: 85,0 MB
 
-Não foi identificado um único processo com consumo de memória
-suficiente para explicar isoladamente o problema.
+Não foi identificado um único processo com consumo de memória suficiente para explicar isoladamente o problema.
 
 ### 3.3 Event Viewer
 
@@ -70,47 +66,38 @@ Foi identificado o seguinte evento:
 - Nível: Information
 - Processo relacionado: WUDFHost.exe
 
-O evento registrava uma alteração/reaplicação de esquema de
-política de energia.
+O evento registrava uma alteração/reaplicação de esquema de política de energia.
 
-O evento estava classificado como informativo e não apresentou
-evidência de relação causal com o sintoma de lentidão.
+O evento estava classificado como informativo e não apresentou evidência de relação causal com o sintoma de lentidão.
 
 Portanto, o evento não foi considerado a causa do incidente.
 
 ### 3.4 Resource Monitor
 
-Foi utilizado o Resource Monitor para analisar a memória e a
-atividade de paginação.
+Foi utilizado o Resource Monitor para analisar a memória e a atividade de paginação.
 
 Durante os testes foram observados picos de aproximadamente:
 
 - Hard Faults/sec: 125
 
-Os picos não foram acompanhados de lentidão perceptível,
-travamentos ou aplicativos sem resposta.
+Os picos não foram acompanhados de lentidão perceptível, travamentos ou aplicativos sem resposta.
 
 ### 3.5 Análise de desempenho anterior
 
-Foi considerada também uma análise de desempenho realizada
-anteriormente no sistema.
+Foi considerada também uma análise de desempenho realizada anteriormente no sistema.
 
 O diagnóstico do Windows indicou:
 
 - Sintoma: o sistema estava apresentando paginação excessiva.
 - Causa: baixa disponibilidade de memória.
-- Detalhes: a memória física total do sistema não conseguia
-  lidar com a carga apresentada.
-- Resolução recomendada: atualizar a memória física ou reduzir
-  a carga do sistema.
+- Detalhes: a memória física total do sistema não conseguia lidar com a carga apresentada.
+- Resolução recomendada: atualizar a memória física ou reduzir a carga do sistema.
 
-Essa evidência histórica é relevante porque demonstra que o
-sistema apresentou pressão de memória em outro momento.
+Essa evidência histórica é relevante porque demonstra que o sistema apresentou pressão de memória em outro momento.
 
 ### 3.6 Teste controlado — Windows recém-iniciado
 
-Após reiniciar o computador e aguardar o carregamento do Windows,
-foram coletados os seguintes dados:
+Após reiniciar o computador e aguardar o carregamento do Windows, foram coletados os seguintes dados:
 
 - RAM instalada: 8 GB
 - RAM em uso: 5,5 GB
@@ -122,8 +109,7 @@ O computador não apresentou lentidão perceptível.
 
 ### 3.7 Teste controlado — uso normal
 
-Após iniciar os aplicativos utilizados normalmente, foram
-coletados novos dados:
+Após iniciar os aplicativos utilizados normalmente, foram coletados novos dados:
 
 - RAM em uso: 6,3 GB
 - RAM disponível: 1,4 GB
@@ -148,40 +134,35 @@ As evidências coletadas indicam:
 - CPU apresentou baixa utilização durante os testes.
 - Disco apresentou baixa utilização e não demonstrou saturação.
 - O sistema possui 8 GB de RAM.
-- A utilização de memória ficou entre aproximadamente 75% e 76%
-  durante parte da investigação.
-- A memória disponível chegou a aproximadamente 1,4 GB durante
-  o uso normal.
-- O Windows apresentou anteriormente um diagnóstico de
-  paginação excessiva.
-- Foram observados picos de aproximadamente 125 Hard Faults/sec
-  durante o teste.
-- Não foi identificado um processo individual com consumo
-  anormal de recursos.
-- O evento encontrado no Event Viewer era informativo e não
-  apresentou relação evidente com o sintoma.
-- O problema de lentidão não foi reproduzido durante os testes
-  realizados.
+- A utilização de memória ficou entre aproximadamente 75% e 76% durante parte da investigação.
+- A memória disponível chegou a aproximadamente 1,4 GB durante o uso normal.
+- O Windows apresentou anteriormente um diagnóstico de paginação excessiva.
+- Foram observados picos de aproximadamente 125 Hard Faults/sec durante o teste.
+- Não foi identificado um processo individual com consumo anormal de recursos.
+- O evento encontrado no Event Viewer era informativo e não apresentou relação evidente com o sintoma.
+- O problema de lentidão não foi reproduzido durante os testes realizados.
 
 ## 5. Hipótese
 
-A capacidade de 8 GB de RAM pode representar uma limitação para
-determinadas cargas de trabalho.
+A capacidade de 8 GB de RAM pode representar uma limitação para determinadas cargas de trabalho.
 
 A combinação de:
 
 - baixa quantidade de RAM física;
-- aproximadamente 1,4 GB de memória disponível durante o uso
-  normal;
+- aproximadamente 1,4 GB de memória disponível durante o uso normal;
 - utilização elevada de memória;
 - evidência histórica de paginação excessiva;
 - ocorrência de Hard Faults;
 
-indica que a pressão de memória pode contribuir para episódios
-específicos de lentidão.
+indica que **pressão de memória pode contribuir para episódios específicos de lentidão**.
 
-Entretanto, os testes atuais não foram suficientes para confirmar
-que a pressão de memória seja a causa direta do sintoma relatado.
+Entretanto, os testes atuais não foram suficientes para confirmar que a pressão de memória seja a causa direta do sintoma relatado.
+
+### Observação técnica sobre Hard Faults/sec
+
+Hard Faults/sec representam acessos a páginas de memória que não estavam disponíveis no conjunto de trabalho do processo e precisaram ser obtidas de outra fonte, como o arquivo de paginação ou um arquivo mapeado. A ocorrência de Hard Faults, por si só, **não significa automaticamente que exista um problema grave de paginação ou que a memória RAM seja a causa da lentidão**.
+
+Neste incidente, os picos observados foram tratados como evidência complementar de atividade de memória. A hipótese de pressão de memória foi sustentada principalmente pela combinação entre 8 GB de RAM, baixa memória disponível em determinados momentos e a evidência histórica do diagnóstico do Windows, e não pelos Hard Faults isoladamente.
 
 ## 6. Testes realizados
 
@@ -204,32 +185,25 @@ Foram realizados os seguintes testes:
 
 ## 7. Diagnóstico
 
-Foi identificada pressão de memória no sistema e existe evidência
-histórica de paginação excessiva.
+Foi identificada pressão de memória em determinados momentos e existe evidência histórica de paginação excessiva.
 
-A capacidade de 8 GB de RAM representa uma possível limitação
-para cargas de trabalho mais elevadas.
+A capacidade de 8 GB de RAM representa uma possível limitação para cargas de trabalho mais elevadas.
 
-Durante o teste atual, entretanto, o sintoma de lentidão não foi
-reproduzido.
+Durante o teste atual, entretanto, o sintoma de lentidão não foi reproduzido.
 
-CPU e disco permaneceram com baixa utilização e não foram
-observados travamentos ou aplicativos sem resposta.
+CPU e disco permaneceram com baixa utilização e não foram observados travamentos ou aplicativos sem resposta.
 
 ### Conclusão
 
-A pressão de memória é uma causa provável para episódios
-específicos de lentidão, porém não foi possível confirmar uma
-relação causal direta durante a investigação atual.
+A pressão de memória é uma **hipótese provável para episódios específicos de lentidão**, porém não foi possível confirmar uma relação causal direta durante a investigação atual.
 
-O incidente deve ser considerado como um problema potencialmente
-intermitente, que necessita de nova coleta de evidências caso a
-lentidão volte a ocorrer.
+Os Hard Faults/sec observados reforçam a existência de atividade de memória, mas não são, isoladamente, evidência suficiente para atribuir a lentidão à paginação.
+
+O incidente deve ser considerado como um problema potencialmente intermitente, que necessita de nova coleta de evidências caso a lentidão volte a ocorrer.
 
 ## 8. Solução
 
-Não foi aplicada nenhuma alteração no sistema durante a
-investigação.
+Não foi aplicada nenhuma alteração no sistema durante a investigação.
 
 Não foram alterados:
 
@@ -239,13 +213,11 @@ Não foram alterados:
 - processos do sistema;
 - configurações de segurança.
 
-A ausência de uma intervenção foi intencional, pois não havia
-evidência suficiente para justificar uma alteração no sistema.
+A ausência de uma intervenção foi intencional, pois não havia evidência suficiente para justificar uma alteração no sistema.
 
 ## 9. Validação
 
-Após os testes realizados, o computador permaneceu operacional
-sem apresentar:
+Após os testes realizados, o computador permaneceu operacional sem apresentar:
 
 - lentidão perceptível;
 - travamentos;
@@ -267,29 +239,14 @@ O problema não foi reproduzido de forma consistente.
 
 Recomenda-se:
 
-1. Monitorar a utilização de memória quando o problema ocorrer
-   novamente.
-
-2. Registrar quais aplicativos estavam sendo utilizados no
-   momento da lentidão.
-
+1. Monitorar a utilização de memória quando o problema ocorrer novamente.
+2. Registrar quais aplicativos estavam sendo utilizados no momento da lentidão.
 3. Registrar horário, duração e frequência do problema.
-
-4. Verificar se o problema ocorre após a abertura de determinados
-   aplicativos ou após aumento significativo da carga do sistema.
-
-5. Repetir a análise do Resource Monitor durante uma ocorrência
-   real de lentidão.
-
-6. Considerar redução da quantidade de aplicativos executados
-   simultaneamente quando houver alta utilização de memória.
-
-7. Avaliar a possibilidade de expansão da memória RAM caso a
-   pressão de memória seja recorrente e compatível com as
-   especificações do equipamento.
-
-8. Não realizar alterações de configuração sem evidências
-   suficientes para justificar a intervenção.
+4. Verificar se o problema ocorre após a abertura de determinados aplicativos ou após aumento significativo da carga do sistema.
+5. Repetir a análise do Resource Monitor durante uma ocorrência real de lentidão.
+6. Considerar redução da quantidade de aplicativos executados simultaneamente quando houver alta utilização de memória.
+7. Avaliar a possibilidade de expansão da memória RAM caso a pressão de memória seja recorrente e compatível com as especificações do equipamento.
+8. Não realizar alterações de configuração sem evidências suficientes para justificar a intervenção.
 
 ## 11. Ferramentas utilizadas
 
@@ -306,7 +263,7 @@ Recomenda-se:
 - Análise de processos
 - Análise de memória
 - Análise de eventos do Windows
-- Análise de paginação
+- Análise de memória virtual
 - Formulação de hipóteses
 - Validação de diagnóstico
 - Documentação de incidentes
