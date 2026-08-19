@@ -47,12 +47,14 @@ Múltiplas abas
       ↓
 Maior consumo de RAM
       ↓
-Pressão de memória
+Menor margem de memória disponível
       ↓
-Possível paginação
+Possível pressão de memória
       ↓
-Lentidão / travamento
+Possível lentidão / travamento
 ```
+
+A hipótese foi tratada como possibilidade a ser testada, e não como causa confirmada.
 
 ## 6. Linha de base — 4 abas
 
@@ -197,7 +199,7 @@ O navegador permaneceu estável.
 14 abas  → 1.567,7 MB
 ```
 
-Existe relação clara entre o aumento do número de abas e o aumento do consumo de memória do Brave.
+Os testes mostram **correlação entre o aumento do número de abas e o aumento do consumo de memória do Brave**. Isso não constitui, isoladamente, prova de que o número de abas seja a causa de qualquer travamento.
 
 ### Evidência 2 — páginas específicas
 
@@ -210,6 +212,8 @@ O Brave Task Manager identificou consumo elevado principalmente em:
 
 O fechamento da aba Topitop reduziu o consumo do Brave em aproximadamente 528,5 MB.
 
+Esse resultado demonstra que a página contribuía significativamente para o consumo de memória observado naquele momento.
+
 ### Evidência 4 — extensão
 
 A desativação do Google Docs Offline não produziu redução significativa de memória.
@@ -220,19 +224,21 @@ Durante os testes, o Brave não apresentou “Não respondendo”, o computador 
 
 ## 16. Diagnóstico
 
-O aumento do número de abas provoca aumento significativo do consumo de memória do Brave. Páginas específicas podem contribuir de forma significativa para esse consumo.
+O aumento do número de abas esteve associado a aumento significativo do consumo de memória do Brave. Páginas específicas também contribuíram de forma significativa para esse consumo.
 
-Em um equipamento com 8 GB de RAM, esse comportamento reduz a margem de memória disponível e contribui para a pressão de memória do sistema.
+Em um equipamento com 8 GB de RAM, esse comportamento reduz a margem de memória disponível e **pode contribuir para pressão de memória em cargas mais elevadas**.
 
 ### Causa provável
 
-A causa provável da degradação está relacionada à combinação de:
+A degradação de desempenho pode estar relacionada à combinação de:
 
 - quantidade de abas abertas;
 - consumo de memória das páginas;
 - quantidade limitada de RAM disponível no equipamento.
 
 Entretanto, a causa direta do travamento relatado não pôde ser confirmada porque o problema não foi reproduzido durante os testes.
+
+Os resultados demonstram contribuição de determinadas páginas para o consumo de memória, mas não demonstram, por si só, que essas páginas ou o número de abas sejam a causa direta do travamento.
 
 ## 17. Limitações da investigação
 
@@ -261,7 +267,7 @@ Uma investigação futura poderia analisar:
 
 ## 19. Resultado final
 
-**Status: Concluído — causa provável identificada, mas travamento não reproduzido.**
+**Status: Concluído — contribuição para consumo de memória identificada, mas travamento não reproduzido.**
 
 A investigação demonstrou que o Brave apresenta aumento significativo de consumo de memória conforme o número de abas aumenta. Determinadas páginas podem consumir centenas de megabytes individualmente.
 
@@ -269,7 +275,7 @@ Os testes de isolamento confirmaram a contribuição significativa de páginas e
 
 Entretanto, não foi possível reproduzir o travamento relatado.
 
-> Pressão de memória causada pela combinação entre múltiplas abas, páginas com alto consumo de recursos e apenas 8 GB de RAM é considerada uma causa provável de degradação do desempenho, mas não foi comprovada como causa direta do travamento.
+> A combinação entre múltiplas abas, páginas com alto consumo de recursos e apenas 8 GB de RAM é considerada uma condição capaz de aumentar a pressão de memória e contribuir para degradação do desempenho, mas não foi comprovada como causa direta do travamento neste incidente.
 
 ## 20. Competências demonstradas
 
