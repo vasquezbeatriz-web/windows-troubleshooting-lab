@@ -187,6 +187,8 @@ A investigação demonstrou que o WhatsApp Desktop está instalado como aplicati
 
 Isso ajuda a explicar por que não foi encontrada uma entrada tradicional nas chaves `Run` e nos mecanismos clássicos de inicialização investigados.
 
+**Importante:** a identificação do pacote AppX/MSIX explica por que a investigação não encontrou uma entrada tradicional, mas **não comprova qual mecanismo específico faz o aplicativo iniciar automaticamente**. O mecanismo exato de inicialização não foi identificado nesta investigação.
+
 ## 13. Identificação do processo
 
 No Gerenciador de Tarefas foi observado:
@@ -306,19 +308,23 @@ Não foram encontradas entradas relacionadas ao WhatsApp em:
 
 O PowerShell confirmou que o WhatsApp Desktop está instalado como aplicativo AppX/MSIX.
 
-### Evidência 4 — Consumo de CPU
+### Evidência 4 — Mecanismo específico não identificado
+
+Embora o Gerenciador de Tarefas indique o WhatsApp como habilitado na inicialização, a investigação não encontrou a entrada ou configuração específica responsável por esse comportamento. Portanto, o mecanismo exato permanece não identificado.
+
+### Evidência 5 — Consumo de CPU
 
 O consumo de CPU permaneceu baixo durante os testes, entre 0,1% e 0,6% nas observações realizadas.
 
-### Evidência 5 — Consumo de memória
+### Evidência 6 — Consumo de memória
 
 O consumo de memória variou entre aproximadamente 488,6 MB, 567 MB e 678,5 MB, demonstrando impacto mensurável na RAM disponível.
 
-### Evidência 6 — Teste de isolamento
+### Evidência 7 — Teste de isolamento
 
 Ao encerrar o WhatsApp, a memória disponível aumentou de aproximadamente 915 MB para 1,3 GB.
 
-### Evidência 7 — Desempenho percebido
+### Evidência 8 — Desempenho percebido
 
 Mesmo após encerrar e reabrir o WhatsApp, o desempenho percebido do computador permaneceu igual.
 
@@ -338,6 +344,8 @@ Não foi identificada evidência suficiente para concluir que o WhatsApp seja a 
 
 Foi identificado apenas que o aplicativo possui impacto mensurável no consumo de memória RAM.
 
+O mecanismo específico responsável pela inicialização automática também não foi identificado durante esta investigação.
+
 ## 21. Ações realizadas
 
 Durante a investigação foram realizadas somente ações de observação e testes controlados.
@@ -353,7 +361,7 @@ Não foram realizadas alterações permanentes em:
 
 ## 22. Resultado final
 
-**Status: Concluído.**
+**Status: Concluído — consumo de memória identificado; mecanismo específico de inicialização e relação causal com lentidão não confirmados.**
 
 A investigação confirmou que o WhatsApp Desktop está habilitado na inicialização do Windows e instalado como aplicativo empacotado AppX/MSIX.
 
@@ -365,7 +373,7 @@ O encerramento temporário do processo aumentou a memória disponível, porém n
 
 Portanto:
 
-> **O WhatsApp contribui para o consumo de memória do sistema, mas os testes realizados não demonstraram que sua inicialização automática seja a causa da lentidão percebida no computador.**
+> **O WhatsApp contribui para o consumo de memória do sistema, mas os testes realizados não demonstraram que sua inicialização automática seja a causa da lentidão percebida no computador. O mecanismo específico responsável pela inicialização automática não foi identificado nesta investigação.**
 
 ## 23. Metodologia de troubleshooting
 
